@@ -44,7 +44,7 @@ mappings.set('/qux/quux', {
 const pgsqlWhere = PgSql.stringify(filter, mappings, { parameterize: true });
 
 console.log(pgsqlWhere);
-// "foo" = $1 AND ("bar_baz" IN ($2,$3,$4) or "qux"."quux" = $5)
+// "foo" = $1 AND ("bar_baz" IN ($2,$3,$4) OR "qux"."quux" = $5)
 ```
 
 ## API

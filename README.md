@@ -67,25 +67,25 @@ Provides services for converting `spleen` filters into pgSQL.
 
   * __Methods__
 
-    + `PgSql.stringify(filter, [options])`: converts an instance of `spleen`'s `Filter`' class into a pgSQL statement.
+    + `PgSql.stringify(filter, mappings [, options])`: converts an instance of `spleen`'s `Filter`' class into a pgSQL statement.
 
       _Parameters_
 
       - `filter`: _(required)_ the instance of `Filter` to stringify.
 
-      - `mappings`: _(required)_ an array of objects that map field targets to columns.  Each object can have the following fields:
-
-        - `column`: a string specifying the column to which the field reference is being mapped.
-
-        - `field`: an RFC 6901 JSON pointer string identifying the field target being mapped.  It is important to note that these references will be matched against `Target.prototype.field`, and, not necessarily, the entire path.
-
-        - `identifier`: a string to use as the contextual identifier used with each column reference.  If this key is given a value, it will override `options.identifier`.
+      - `mappings`: _(required)_ a [`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) that aligns field targets in a `Filter` to columns in a database table/view/etc.
+      
+        The key of each entry is the an RFC 6901 JSON pointer string that identifies the field being mapped.  It is important to note that these references will be matched against `Target.prototype.field`, and, not necessarily, the entire path.  This is because some fields may be arrays, and the full path in a target may include an index value.
         
-        - `isArray`: a Boolean value indicating whether or not the column is an array.  The default is `false`.
+        Each value in the `Map` is an object that object can have the following fields:
 
-        - `isRequired`: a Boolean value indicating whether or not the field must be present in the `Filter`.  The default is `false`.
+        - `column`: _(required)_ a string specifying the column to which the field reference is being mapped.  
 
-        Alternatively, the `mappings` option can be an ECMAScript [`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) where the key is `field`, and the value is an object with the same fields described above (only sans `field`).
+        - `identifier`: _(optional)_ a string to use as the contextual identifier used with each column reference.  If this key is given a value, it will override `options.identifier`.
+        
+        - `isArray`: _(optional)_ a Boolean value indicating whether or not the column is an array.  The default is `false`.
+
+        - `isRequired`: _(optional)_ a Boolean value indicating whether or not the field must be present in the `Filter`.  The default is `false`.
 
       - `options`: _(optional)_ an object that controls various aspects of the stringification process.  This object can have the keys:
 
@@ -103,7 +103,7 @@ Provides services for converting `spleen` filters into pgSQL.
 
 It is highly recommended that you leave the `parameterize` option as `true` to help prevent SQL-injection attacks.
 
-It is also highly recommend that you give leverge `spleen`'s `Filter.prototype.prioritize()` method before converting to a pgSQL expression.  This allows you to reorder a `Filter`, and optimally utilize known indexes.
+It is also highly recommend that you leverge `spleen`'s `Filter.prototype.prioritize()` method before converting to a pgSQL expression.  This allows you to reorder a `Filter`, and optimally utilize known indexes.
 
 ## Stringify Behavior
 

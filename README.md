@@ -5,6 +5,7 @@ The [`spleen`](https://www.npmjs.com/package/spleen) module provides high-level 
 __Contents__
 * [Usage](#usage)
 * [API](#api)
+* [Supported PostgreSQL Data Types](#supported-postgresql-data-types)
 * [Security Considerations](#security-considerations)
 * [Stringify Behavior](#stringify-behavior)
 
@@ -22,22 +23,31 @@ Then use it in your code:
 const PgSql = require('spleen-pgsql');
 const spleen = require('spleen');
 
-const expression = '/foo eq 42 and (/bar/baz in [1,2,3] or /qux/quux eq 12)';
+const expression = '/foo eq 42 and (/bar/baz in [1,2,3] or /qux/quux eq "abc")';
 const filter = spleen.parse(expression);
 
 const mappings = new Map();
 
 mappings.set('/foo', {
-  column: 'foo',
+  column: {
+    name: 'foo',
+    type: 'int4',
+  },
   isRequired: true,
 });
 
 mappings.set('/bar/baz', {
-  column: 'bar_baz',
+  column: {
+    name: 'bar_baz',
+    type: 'int2'
+  },
 });
 
 mappings.set('/qux/quux', {
-  column: 'quux',
+  column: {
+    name: 'quux',
+    type: 'text',
+  },
   identifier: 'qux',
 });
 
@@ -85,41 +95,7 @@ Provides services for converting `spleen` filters into pgSQL.
 
           - `name`: _(required)_ a string specifying the name of the column.
 
-          - `type`: _(required)_ a sring specifying the type of the column.  This property can have the following possible values:
-
-            - `bit`
-            - `int8`
-            - `bool`
-            - `bytea`
-            - `char`
-            - `cidr`
-            - `date`
-            - `decimal`
-            - `float4`
-            - `float8`
-            - `inet`
-            - `int2`
-            - `int4`
-            - `interval`
-            - `json`
-            - `jsonb`
-            - `macaddr`
-            - `money`
-            - `path`
-            - `point`
-            - `polygon`
-            - `serial2`
-            - `serial4`
-            - `serial8`
-            - `text`
-            - `time`
-            - `timestamp`
-            - `timestamptz`
-            - `timetz`
-            - `uuid`
-            - `varbit`
-            - `varchar`
-            - `xml`
+          - `type`: _(required)_ a sring specifying the type of the column.  For possible values see [Supported PostgreSQL Data Types](#supported-postgresql-data-types)
 
         - `identifier`: _(optional)_ a string to use as the contextual identifier used with each column reference.  If this key is given a value, it will override `options.identifier`.
 
@@ -133,9 +109,51 @@ Provides services for converting `spleen` filters into pgSQL.
 
       This method returns an object with the following keys:
 
-      - `params`: an array of values, where the index of each entry corresponds to its `$#` placeholder in the filter statement.
+      - `params`: an array of objects that describes the parameters used in the query.  The index of each entry corresponds to its `$#` placeholder in the filter statement.  The corresponding `$#` placeholder will be index - 1.  Each object has the following properties:
+
+        - `type`: the PostgreSQL data type of the parameter.
+
+        - `value`: the value of the parameter.
 
       - `value`: a string containing the pgSQL filter statement.
+
+## Supported PostgreSQL Data Types
+
+PostgreSQL provides a wide variety of data types.  Not all of them can be supported by `spleen`.  Some will in time, but some may never be supported.  The following is a list of data types that are currently supported.
+
+* `bit`
+* `int8`
+* `bool`
+* `bytea`
+* `char`
+* `cidr`
+* `date`
+* `decimal`
+* `float4`
+* `float8`
+* `inet`
+* `int2`
+* `int4`
+* `interval`
+* `json`
+* `jsonb`
+* `macaddr`
+* `money`
+* `path`
+* `point`
+* `polygon`
+* `serial2`
+* `serial4`
+* `serial8`
+* `text`
+* `time`
+* `timestamp`
+* `timestamptz`
+* `timetz`
+* `uuid`
+* `varbit`
+* `varchar`
+* `xml`
 
 ## Security Considerations
 

@@ -39,7 +39,7 @@ mappings.set('/foo', {
 mappings.set('/bar/baz', {
   column: {
     name: 'bar_baz',
-    type: 'int2'
+    type: 'int2',
   },
 });
 
@@ -95,7 +95,7 @@ Provides services for converting `spleen` filters into pgSQL.
 
           - `name`: _(required)_ a string specifying the name of the column.
 
-          - `type`: _(required)_ a sring specifying the type of the column.  For possible values see [Supported PostgreSQL Data Types](#supported-postgresql-data-types)
+          - `type`: _(required)_ a sring specifying the type of the column.  For possible values see [Supported PostgreSQL Data Types](#supported-postgresql-data-types).
 
         - `identifier`: _(optional)_ a string to use as the contextual identifier used with each column reference.  If this key is given a value, it will override `options.identifier`.
 
@@ -111,7 +111,7 @@ Provides services for converting `spleen` filters into pgSQL.
 
       - `params`: an array of objects that describes the parameters used in the query.  The index of each entry corresponds to its `$#` placeholder in the filter statement.  The corresponding `$#` placeholder will be index - 1.  Each object has the following properties:
 
-        - `type`: the PostgreSQL data type of the parameter.
+        - `type`: the PostgreSQL data type of the parameter.  For possible values see [Supported PostgreSQL Data Types](#supported-postgresql-data-types).
 
         - `value`: the value of the parameter.
 
@@ -139,9 +139,6 @@ PostgreSQL provides a wide variety of data types.  Not all of them can be suppor
 * `jsonb`
 * `macaddr`
 * `money`
-* `path`
-* `point`
-* `polygon`
 * `serial2`
 * `serial4`
 * `serial8`

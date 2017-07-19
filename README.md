@@ -79,11 +79,49 @@ Provides services for converting `spleen` filters into pgSQL.
         
         Each value in the `Map` is an object that object can have the following fields:
 
-        - `column`: _(required)_ a string specifying the column to which the field reference is being mapped.  
+        - `column`: _(required)_ an object provides information about the column to which the field is being mapped.  This object has the following properties:
+        
+          - `isArray`: _(optional)_ a Boolean indicating whether or not the column is an array.
+
+          - `name`: _(required)_ a string specifying the name of the column.
+
+          - `type`: _(required)_ a sring specifying the type of the column.  This property can have the following possible values:
+
+            - `bit`
+            - `int8`
+            - `bool`
+            - `bytea`
+            - `char`
+            - `cidr`
+            - `date`
+            - `decimal`
+            - `float4`
+            - `float8`
+            - `inet`
+            - `int2`
+            - `int4`
+            - `interval`
+            - `json`
+            - `jsonb`
+            - `macaddr`
+            - `money`
+            - `path`
+            - `point`
+            - `polygon`
+            - `serial2`
+            - `serial4`
+            - `serial8`
+            - `text`
+            - `time`
+            - `timestamp`
+            - `timestamptz`
+            - `timetz`
+            - `uuid`
+            - `varbit`
+            - `varchar`
+            - `xml`
 
         - `identifier`: _(optional)_ a string to use as the contextual identifier used with each column reference.  If this key is given a value, it will override `options.identifier`.
-        
-        - `isArray`: _(optional)_ a Boolean value indicating whether or not the column is an array.  The default is `false`.
 
         - `isRequired`: _(optional)_ a Boolean value indicating whether or not the field must be present in the `Filter`.  The default is `false`.
 
